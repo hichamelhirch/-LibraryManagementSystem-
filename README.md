@@ -20,18 +20,4 @@ Step 7: From the browser call the endpoint http://localhost:9080
 Step 8: Admin Login User Id: ```admin@admin.in``` & Password: ```Temp123```
 
 
-# Admin Login Interface
-
-
-# Add new books, update books, view books, delete books
-
-
-# Add new authors, update authors, view authors, delete authors
-
-
-# Add new categories, update categories, view categories, delete categories
-
-
-# Add new publishers, update publishers, view publishers, delete publishers
-
 
