@@ -1,42 +1,61 @@
-# Java, Spring Boot Mini Project - Library Management System
+#!/bin/bash
 
+# Script to setup the Library Management System
 
-# Local setup
+# Step 1: Clone the repository from GitHub
+echo "Cloning the project repository..."
+git clone https://github.com/your-repo/library-management-system.git
+cd library-management-system || exit
 
-Step 1: Download or clone the source code from GitHub to the local machine
+# Step 2: Check if JDK 17 is installed
+echo "Checking JDK 17 installation..."
+if type -p java; then
+    echo "Java found in PATH."
+    _java=java
+elif [[ -n "$JAVA_HOME" ]] && [[ -x "$JAVA_HOME/bin/java" ]]; then
+    echo "Java found in JAVA_HOME."
+    _java="$JAVA_HOME/bin/java"
+else
+    echo "JDK 17 is not installed. Downloading and installing..."
+    wget https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz
+    sudo tar -xvzf jdk-17_linux-x64_bin.tar.gz -C /opt/
+    export JAVA_HOME=/opt/jdk-17
+    export PATH=$JAVA_HOME/bin:$PATH
+    echo "JDK 17 installed successfully."
+fi
 
-Step 2: Install JDK 17 - https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html
+java_version=$("$_java" -version 2>&1 | awk -F[\".] '{print $2}')
+if [ "$java_version" -lt 17 ]; then
+    echo "JDK 17 is required but lower version detected."
+    exit 1
+else
+    echo "JDK 17 is installed."
+fi
 
-Step 3: Install IntelliJ IDEA or Eclipse or Apache NetBeans IDE
+# Step 3: Install Apache Maven if not installed
+if ! type mvn > /dev/null; then
+    echo "Maven is not installed. Downloading and installing Maven..."
+    wget https://apache.mirror.digitalpacific.com.au/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
+    sudo tar -xvzf apache-maven-3.8.5-bin.tar.gz -C /opt/
+    export M2_HOME=/opt/apache-maven-3.8.5
+    export PATH=$M2_HOME/bin:$PATH
+    echo "Maven installed successfully."
+else
+    echo "Maven is already installed."
+fi
 
-Step 4: Install Apache Maven - https://maven.apache.org/install.html
+# Step 4: Build the project with Maven
+echo "Building the project with Maven..."
+mvn clean install
 
-Step 5:  ```mvn clean install```
+# Step 5: Run the Spring Boot Application
+echo "Starting the Spring Boot application..."
+mvn spring-boot:run &
 
-Step 6:  ```mvn spring-boot:run```
+# Step 6: Provide admin credentials for login
+echo "Application is running. You can access it at: http://localhost:9080"
+echo "Admin Login Credentials:"
+echo "User ID: admin@admin.in"
+echo "Password: Temp123"
 
-Step 7: From the browser call the endpoint http://localhost:9080
-
-Step 8: Admin Login User Id: ```admin@admin.in``` & Password: ```Temp123```
-
-
-# Admin Login Interface
-
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiiuctxupeOK4Nh8j-nomwwapjkcVvkYig3lX7qoifcXE76_6CnOXMZ-CLww7G180qegsCkrtyUlaqpJsWm9GzhX9QUFxyNyEUAXFD5UWJpvh2BdIr0wyAnFC38QOdsL_1vak8LtxYHrZyplCU_Sri-7kM9nXxI9heXXB0621rzJgL6j1CSweX6xjaorg/s945/admin-login.png">
-
-# Add new books, update books, view books, delete books
-
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjYMpuCQx3lGsS4T_H4ziyDWIkBpYV5qgo5JHFMV0Drper48H7YfygEdv0htE3yWo8mlypUW9W7NFY00UtrVznFfFYIzNGAXBeskhBb_kHAJrVKnI7O5mZt0_c085n6ir-cNVEYsTYffn6WgCmoBiZULR88ah_YxDC-ywRKPTsxj58GcHFnyyeX00RsNA/s800/library-management-system.png">
-
-# Add new authors, update authors, view authors, delete authors
-
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEixAW5k4E9IXf_OuVO1S5m100KS1xFo2ZrFoLnZYvNLjfpmIdI8W0ukd6yQn6oTsSWBKjDdAIGsnPf0EhgRwKzfpVq3mJXMcqG94Qp2oCCy0Pzf01b3kXP2ahgbvpFQND60c7cHwPNZ7A6uXh7fxqvB5od26PleS3giunEN-uAuFIuKijjELspH1_gLcw/s934/authors-list.png">
-
-# Add new categories, update categories, view categories, delete categories
-
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhYe6-eBO4HZjqE1Rr0PLoHS1dlvlnwuagwQtX6eRavoDsWRGk4yfguhWIdcOFRgM4H7985xL1bdiLQLqX_iU7RzddDb1yiQ0P3M0sfwUdTRlRGMg85Kp2KKTsVZH5WGlptL6LFRTITq4oSCJFFCZwGML1RrxI-chu-xb4eXOWIoZpNlFWLLUzkW6zLdQ/s935/categorylist.png">
-
-# Add new publishers, update publishers, view publishers, delete publishers
-
-<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhcNQAd4UVi_bYQQSvW49hn0rQ1O7bEBDyN4DDNJSH1rtxBg37QIHQKAp7ELGbFV4Xva2F0DmhTkA3vKVeZcmKs7lODgTulsJr1aLyBckEojzxzZE5FYlfuEwD62Qco6PsjdNVPEWT76GlyVnSP94zNZK59w3CMRuvbYjoc1-MpyXj-WCeNEjPDm6mucw/s938/publishers-list.png">
-
+# End of Script
